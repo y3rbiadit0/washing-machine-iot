@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "washing-machine-api"
+version = "0.1.0"
+description = ""
+authors = ["Franco N. Merenda <merenda.franco83@gmail.com>"]
+readme = "README.md"
+packages = [{include = "washing_machine_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.1"
+uvicorn = "^0.24.0.post1"
+pydantic-settings = "^2.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
