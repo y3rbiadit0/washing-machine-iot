@@ -12,11 +12,11 @@ class FirestoreService:
         self.db = firestore.client()
         self.collection_ref = self.db.collection(self.collection)
 
-    def add(self, data: Dict) -> str:
+    def add(self, data: T) -> str:
         timestamp, doc_ref = self.collection_ref.add(data)
         return doc_ref.id
 
-    def get(self, doc_id: str) -> dict:
+    def get(self, doc_id: str) -> T:
         doc = self.collection_ref.document(doc_id).get()
         return doc.to_dict()
 
