@@ -295,3 +295,4 @@ pyrightconfig.json
 /.idea/vcs.xml
 /.idea/washing-machine-api.iml
 credentials.json
+/.idea/codeStyles/codeStyleConfig.xml
