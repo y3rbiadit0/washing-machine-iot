@@ -1,5 +1,7 @@
+import base64
 import uuid
 from io import BytesIO
+from typing import List, Literal
 
 import qrcode
 from pydantic import BaseModel
@@ -13,7 +15,7 @@ class WashingMachineModel(BaseModel):
     capacity_kg: int
     price: int = 0
     status: str = "free"
-    qr_code: bytes = None
+    qr_code: str = None
     brand: str = None
     model: str = None
 
@@ -30,7 +32,15 @@ class WashingMachinesFirestoreService(FirestoreService):
     def get(self, doc_id: str) -> WashingMachineModel:
         return WashingMachineModel(**super().get(doc_id))
 
-    def _generate_qr_code(self, data: WashingMachineModel) -> bytes:
+    def get_by_machine_id(self, machine_id: str) -> WashingMachineModel:
+        return WashingMachineModel(
+            **super().get_by_field(field="machine_id", expected_value=machine_id)
+        )
+
+    def get_all(self) -> List[WashingMachineModel]:
+        return [WashingMachineModel(**doc) for doc in super().get_all()]
+
+    def _generate_qr_code(self, data: WashingMachineModel) -> str:
         # Generate a QR code with the washing machine ID
         qr = qrcode.QRCode(
             version=1,
@@ -49,4 +59,4 @@ class WashingMachinesFirestoreService(FirestoreService):
         img.save(img_bytes_io)
         img_bytes_io.seek(0)
 
-        return img_bytes_io.read()
+        return base64.b64encode(img_bytes_io.read()).decode("utf-8")

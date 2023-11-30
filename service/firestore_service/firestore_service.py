@@ -1,6 +1,7 @@
-from typing import TypeVar, Dict
+from typing import TypeVar, Dict, List
 
 from firebase_admin import firestore
+from google.cloud.firestore_v1 import FieldFilter
 
 T = TypeVar("T")
 
@@ -19,6 +20,17 @@ class FirestoreService:
     def get(self, doc_id: str) -> T:
         doc = self.collection_ref.document(doc_id).get()
         return doc.to_dict()
+
+    def get_by_field(self, field: str, expected_value: str) -> T:
+        docs = self.collection_ref.where(
+            filter=FieldFilter(field, "==", expected_value)
+        ).get()
+        assert len(docs) == 1, "More than one document found"
+        return docs[0].to_dict()
+
+    def get_all(self) -> List[T]:
+        docs = self.collection_ref.get()
+        return [doc.to_dict() for doc in docs]
 
 
 class ReservationFirestoreService(FirestoreService):

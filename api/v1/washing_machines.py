@@ -1,5 +1,7 @@
+import base64
 import http
 from io import BytesIO
+from typing import List
 
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
@@ -17,25 +19,29 @@ async def add_new_machine(data: WashingMachineModel):
     return {"id": WashingMachinesFirestoreService().add(data)}
 
 
-@router.get("/", status_code=http.HTTPStatus.OK)
-async def get_machines_status() -> WashingMachineModel:
-    data = WashingMachinesFirestoreService().get(doc_id="a5IgkOocZeqI0WkaPMZH")
+@router.get("/status/{machine_id}", status_code=http.HTTPStatus.OK)
+async def get_machine_status(machine_id: str) -> WashingMachineModel:
+    data = WashingMachinesFirestoreService().get_by_machine_id(machine_id=machine_id)
     return data
+
 
 @router.get("/all", status_code=http.HTTPStatus.OK)
-async def get_machines_status() -> WashingMachineModel:
-    data = WashingMachinesFirestoreService().get(doc_id="a5IgkOocZeqI0WkaPMZH")
+async def get_machines_status() -> List[WashingMachineModel]:
+    data = WashingMachinesFirestoreService().get_all()
     return data
 
 
-@router.get("/get_qr_code")
-async def get_qr_code():
+@router.get("/qr_code/{machine_id}", status_code=http.HTTPStatus.OK)
+async def get_qr_code(machine_id: str) -> StreamingResponse:
     qr_code_bytes = (
-        WashingMachinesFirestoreService().get(doc_id="a5IgkOocZeqI0WkaPMZH").qr_code
+        WashingMachinesFirestoreService()
+        .get_by_machine_id(machine_id=machine_id)
+        .qr_code
     )
-
     # Return the QR code bytes as a StreamingResponse
-    return StreamingResponse(BytesIO(qr_code_bytes), media_type="image/png")
+    return StreamingResponse(
+        BytesIO(base64.b64decode(qr_code_bytes)), media_type="image/png"
+    )
 
 
 @router.post("/start", status_code=http.HTTPStatus.CREATED)
