@@ -14,7 +14,7 @@ class WashingMachineModel(BaseModel):
     location: str
     capacity_kg: int
     price: int = 0
-    status: str = "free"
+    status: Literal["free", "occupied", "out_of_service"] = "free"
     qr_code: str = None
     brand: str = None
     model: str = None
