@@ -64,7 +64,6 @@ class MqttService:
             hostname=mqtt_broker_ip,
             qos=2,
         )
-        return {"message": "Door Opened!"}
 
     async def close_door(self, machine_id: str):
         payload = {"machine_id": machine_id, "action": "close"}
@@ -74,4 +73,3 @@ class MqttService:
             hostname=mqtt_broker_ip,
             qos=2,
         )
-        return {"message": "Door Closed!"}
