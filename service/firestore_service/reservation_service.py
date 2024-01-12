@@ -13,7 +13,6 @@ from .washing_machines_service import (
 from ..helpers import datetime_helper
 
 
-@dataclass
 class ReservationModel(BaseModel):
     machine_id: str = None
     user_id: str = None
@@ -30,7 +29,7 @@ class ReservationFirestoreService(FirestoreService):
         reservation_id = str(uuid.uuid4())
         data = ReservationModel(
             reservation_id=reservation_id,
-            user_id="dummy_user_id",
+            user_id=data["user_id"],
             machine_id=selected_washing_machine_id,
             limit_time=datetime_helper.datetime_to_str(limit_time),
         )
@@ -39,7 +38,7 @@ class ReservationFirestoreService(FirestoreService):
 
     def _reserve_washing_machine(self) -> str:
         washing_machine_service = WashingMachinesFirestoreService()
-        available_washing_machines = washing_machine_service.get_by_field(
+        available_washing_machines = washing_machine_service.get_multiple_by_field(
             "status", "free"
         )
         if len(available_washing_machines) == 0:

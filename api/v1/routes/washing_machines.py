@@ -6,6 +6,10 @@ from typing import List
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 
+from service.firestore_service.reservation_service import (
+    ReservationFirestoreService,
+    ReservationModel,
+)
 from service.firestore_service.washing_machines_service import (
     WashingMachinesFirestoreService,
     WashingMachineModel,
@@ -59,3 +63,11 @@ async def end_laundry():
     # Publish to topic -> new status of machines
     # Send message to servo to open door
     return {"message": "Cancellation Successful!"}
+
+
+@router.post("/reserve", status_code=http.HTTPStatus.CREATED)
+async def reserve_washing_machine() -> ReservationModel:
+    reservation_service = ReservationFirestoreService()
+    reservation_id = reservation_service.add({"user_id": "dummy_user_id"})
+    reservation = reservation_service.get(reservation_id)
+    return reservation

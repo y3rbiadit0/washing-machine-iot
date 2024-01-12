@@ -30,7 +30,8 @@ class WashingMachinesFirestoreService(FirestoreService):
         return super().add(data.model_dump())
 
     def update(self, machine_id: str, data: dict) -> str:
-        return super().update(machine_id, data)
+        doc_id = self.get_doc_id_by_field(field="machine_id", expected_value=machine_id)
+        return super().update(doc_id, data)
 
     def get(self, doc_id: str) -> WashingMachineModel:
         return WashingMachineModel(**super().get(doc_id))
