@@ -26,7 +26,7 @@ async def get_machine_status(machine_id: str) -> WashingMachineModel:
 
 
 @router.get("/all", status_code=http.HTTPStatus.OK)
-async def get_machines_status() -> List[WashingMachineModel]:
+async def get_machines_data() -> List[WashingMachineModel]:
     data = WashingMachinesFirestoreService().get_all()
     return data
 
@@ -46,9 +46,16 @@ async def get_qr_code(machine_id: str) -> StreamingResponse:
 
 @router.post("/start", status_code=http.HTTPStatus.CREATED)
 async def start_laundry():
+    # Reserve washing machine
+
+    # Publish to topic -> new status of machines
+    # Send message to servo to open door
     return {"message": "Start Successful!"}
 
 
 @router.post("/end", status_code=http.HTTPStatus.OK)
 async def end_laundry():
+    # Free washing machine
+    # Publish to topic -> new status of machines
+    # Send message to servo to open door
     return {"message": "Cancellation Successful!"}
