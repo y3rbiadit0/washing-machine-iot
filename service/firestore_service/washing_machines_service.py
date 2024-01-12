@@ -29,6 +29,9 @@ class WashingMachinesFirestoreService(FirestoreService):
         data.qr_code = self._generate_qr_code(data)
         return super().add(data.model_dump())
 
+    def update(self, machine_id: str, data: dict) -> str:
+        return super().update(machine_id, data)
+
     def get(self, doc_id: str) -> WashingMachineModel:
         return WashingMachineModel(**super().get(doc_id))
 

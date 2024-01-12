@@ -1,4 +1,4 @@
-from typing import TypeVar, Dict, List
+from typing import TypeVar, List
 
 from firebase_admin import firestore
 from google.cloud.firestore_v1 import FieldFilter
@@ -32,12 +32,6 @@ class FirestoreService:
         docs = self.collection_ref.get()
         return [doc.to_dict() for doc in docs]
 
-
-class ReservationFirestoreService(FirestoreService):
-    collection = "reservations"
-
-    def add(self, data: Dict) -> str:
-        return super().add(data)
-
-    def get(self, doc_id: str) -> dict:
-        return super().get(doc_id)
+    def update(self, doc_id: str, data: dict) -> str:
+        self.collection_ref.document(doc_id).update(data)
+        return doc_id
