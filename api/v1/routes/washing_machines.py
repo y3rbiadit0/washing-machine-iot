@@ -6,14 +6,14 @@ from typing import List
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 
-from service.firestore_service.reservation_service import (
-    ReservationFirestoreService,
-    ReservationModel,
-)
+from service.firestore_service.reservation_service import ReservationFirestoreService
 from service.firestore_service.washing_machines_service import (
     WashingMachinesFirestoreService,
-    WashingMachineModel,
 )
+from service.mqtt_service import MqttService
+from ..models.base_response import BaseResponse
+from ..models.reservation_model import ReservationModel
+from ..models.washing_machine_model import WashingMachineModel
 
 router = APIRouter(prefix="/washing-machines")
 
@@ -48,21 +48,16 @@ async def get_qr_code(machine_id: str) -> StreamingResponse:
     )
 
 
-@router.post("/start", status_code=http.HTTPStatus.CREATED)
-async def start_laundry():
-    # Reserve washing machine
-
-    # Publish to topic -> new status of machines
-    # Send message to servo to open door
-    return {"message": "Start Successful!"}
+@router.post("/unblock", status_code=http.HTTPStatus.CREATED)
+async def unblock_machine(reservation_data: ReservationModel):
+    await MqttService().open_door(machine_id=reservation_data.machine_id)
+    return BaseResponse(message="Machine unblocked successfully!")
 
 
-@router.post("/end", status_code=http.HTTPStatus.OK)
-async def end_laundry():
-    # Free washing machine
-    # Publish to topic -> new status of machines
-    # Send message to servo to open door
-    return {"message": "Cancellation Successful!"}
+@router.post("/block", status_code=http.HTTPStatus.OK)
+async def end_laundry(reservation_data: ReservationModel):
+    await MqttService().open_door(machine_id=reservation_data.machine_id)
+    return BaseResponse(message="Machine blocked successfully!")
 
 
 @router.post("/reserve", status_code=http.HTTPStatus.CREATED)
@@ -70,4 +65,5 @@ async def reserve_washing_machine() -> ReservationModel:
     reservation_service = ReservationFirestoreService()
     reservation_id = reservation_service.add({"user_id": "dummy_user_id"})
     reservation = reservation_service.get(reservation_id)
+    await MqttService().update_status()
     return reservation
