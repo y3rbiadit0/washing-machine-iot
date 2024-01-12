@@ -54,9 +54,9 @@ async def unblock_machine(reservation_data: ReservationModel):
     return BaseResponse(message="Machine unblocked successfully!")
 
 
-@router.post("/block", status_code=http.HTTPStatus.OK)
-async def end_laundry(reservation_data: ReservationModel):
-    await MqttService().open_door(machine_id=reservation_data.machine_id)
+@router.post("/block", status_code=http.HTTPStatus.CREATED)
+async def block_machine(reservation_data: ReservationModel):
+    await MqttService().close_door(machine_id=reservation_data.machine_id)
     return BaseResponse(message="Machine blocked successfully!")
 
 
@@ -67,3 +67,4 @@ async def reserve_washing_machine() -> ReservationModel:
     reservation = reservation_service.get(reservation_id)
     await MqttService().update_status()
     return reservation
+
