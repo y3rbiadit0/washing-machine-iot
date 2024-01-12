@@ -1,23 +1,12 @@
 import base64
 import uuid
 from io import BytesIO
-from typing import List, Literal
+from typing import List
 
 import qrcode
-from pydantic import BaseModel
 
+from api.v1.models.washing_machine_model import WashingMachineModel
 from .firestore_service import FirestoreService
-
-
-class WashingMachineModel(BaseModel):
-    machine_id: str = None
-    location: str
-    capacity_kg: int
-    price: int = 0
-    status: Literal["free", "occupied", "out_of_service"] = "free"
-    qr_code: str = None
-    brand: str = None
-    model: str = None
 
 
 class WashingMachinesFirestoreService(FirestoreService):

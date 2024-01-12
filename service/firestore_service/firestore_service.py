@@ -1,4 +1,4 @@
-from typing import TypeVar, List, Iterable
+from typing import TypeVar, List
 
 from firebase_admin import firestore
 from google.cloud.firestore_v1 import FieldFilter

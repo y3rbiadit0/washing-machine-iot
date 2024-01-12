@@ -1,23 +1,14 @@
 import datetime
 import uuid
-from dataclasses import dataclass
 from random import randint
 from typing import Dict
 
-from pydantic import BaseModel
-
+from api.v1.models.reservation_model import ReservationModel
 from .firestore_service import FirestoreService
 from .washing_machines_service import (
     WashingMachinesFirestoreService,
 )
 from ..helpers import datetime_helper
-
-
-class ReservationModel(BaseModel):
-    machine_id: str = None
-    user_id: str = None
-    reservation_id: str = None
-    limit_time: str = None
 
 
 class ReservationFirestoreService(FirestoreService):
