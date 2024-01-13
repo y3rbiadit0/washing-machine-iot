@@ -4,6 +4,7 @@ from io import BytesIO
 from typing import List
 
 import qrcode
+from fastapi import WebSocket
 
 from api.v1.models.washing_machine_model import WashingMachineModel
 from .firestore_service import FirestoreService
@@ -53,3 +54,21 @@ class WashingMachinesFirestoreService(FirestoreService):
         img_bytes_io.seek(0)
 
         return base64.b64encode(img_bytes_io.read()).decode("utf-8")
+
+    async def listen_washing_machines(self, websocket: WebSocket):
+        doc_ref = WashingMachinesFirestoreService().collection_ref
+        async def on_snapshot(doc_snapshot, changes, read_time):
+            data = [WashingMachineModel(**doc.to_dict()).model_dump() for doc in
+                    doc_snapshot]
+            await websocket.send_json(data, mode="text")
+        doc_watch = doc_ref.on_snapshot(on_snapshot)
+
+        try:
+            # IMPORTANT: Keep WebSocket connection alive
+            while True:
+                await websocket.receive_text()
+        except Exception as e:
+            doc_watch.unsubscribe()
+
+
+

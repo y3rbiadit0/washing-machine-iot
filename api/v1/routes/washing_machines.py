@@ -3,13 +3,12 @@ import http
 from io import BytesIO
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocket, websockets
 from starlette.responses import StreamingResponse
 
 from service.firestore_service.reservation_service import ReservationFirestoreService
 from service.firestore_service.washing_machines_service import (
-    WashingMachinesFirestoreService,
-)
+    WashingMachinesFirestoreService)
 from service.mqtt_service import MqttService
 from ..models.base_response import BaseResponse
 from ..models.reservation_model import ReservationModel
@@ -68,3 +67,10 @@ async def reserve_washing_machine() -> ReservationModel:
     await MqttService().update_status()
     return reservation
 
+
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    await WashingMachinesFirestoreService().listen_washing_machines(websocket)
