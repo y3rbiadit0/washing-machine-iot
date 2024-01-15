@@ -1,7 +1,9 @@
 import datetime
 import uuid
 from random import randint
-from typing import Dict
+from typing import Dict, List
+
+from fastapi import WebSocket
 
 from api.v1.models.reservation_model import ReservationModel
 from .firestore_service import FirestoreService
@@ -23,6 +25,7 @@ class ReservationFirestoreService(FirestoreService):
             user_id=data["user_id"],
             machine_id=selected_washing_machine_id,
             limit_time=datetime_helper.datetime_to_str(limit_time),
+            reservation_status="created",
         )
         firestore_id = super().add(data.model_dump())
         return firestore_id
@@ -44,3 +47,24 @@ class ReservationFirestoreService(FirestoreService):
 
     def get(self, doc_id: str) -> ReservationModel:
         return ReservationModel(**super().get(doc_id))
+
+    def get_all(self) -> List[ReservationModel]:
+        return [ReservationModel(**doc) for doc in super().get_all()]
+
+    async def listen_reservations(self, websocket: WebSocket):
+        doc_ref = self.collection_ref
+
+        async def on_snapshot(doc_snapshot, changes, read_time):
+            data = [
+                ReservationModel(**doc.to_dict()).model_dump() for doc in doc_snapshot
+            ]
+            await websocket.send_json(data, mode="text")
+
+        doc_watch = doc_ref.on_snapshot(on_snapshot)
+
+        try:
+            # IMPORTANT: Keep WebSocket connection alive
+            while True:
+                await websocket.receive_text()
+        except Exception as e:
+            doc_watch.unsubscribe()
