@@ -1,11 +1,11 @@
 import json
 from enum import Enum
-from typing import Dict
+from typing import Dict, List
 
 from paho.mqtt import publish
 
+from api.v1.models.washing_machine_model import WashingMachineModel
 from mqtt_config import mqtt_broker_ip
-from .firestore_service.washing_machines_service import WashingMachinesFirestoreService
 
 
 class MQTTTopic(str, Enum):
@@ -14,13 +14,7 @@ class MQTTTopic(str, Enum):
 
 
 class MqttService:
-    washing_machines_firestore_service: WashingMachinesFirestoreService = None
-
-    def __init__(self):
-        self.washing_machines_firestore_service = WashingMachinesFirestoreService()
-
-    async def update_status(self) -> Dict:
-        data = self.washing_machines_firestore_service.get_all()
+    async def update_status(self, data: List[WashingMachineModel]) -> Dict:
         free_machines = len(
             [
                 washing_machine

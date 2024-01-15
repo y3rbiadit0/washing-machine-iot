@@ -8,10 +8,12 @@ from fastapi import WebSocket
 
 from api.v1.models.washing_machine_model import WashingMachineModel
 from .firestore_service import FirestoreService
+from ..mqtt_service import MqttService
 
 
 class WashingMachinesFirestoreService(FirestoreService):
     collection = "washing_machines"
+    mqttService = MqttService()
 
     def add(self, data: WashingMachineModel) -> str:
         data.machine_id = str(uuid.uuid4())
@@ -57,11 +59,10 @@ class WashingMachinesFirestoreService(FirestoreService):
 
     async def listen_washing_machines(self, websocket: WebSocket):
         async def on_snapshot(doc_snapshot, changes, read_time):
-            data = [
-                WashingMachineModel(**doc.to_dict()).model_dump()
-                for doc in doc_snapshot
-            ]
-            await websocket.send_json(data, mode="text")
+            data = [WashingMachineModel(**doc.to_dict()) for doc in doc_snapshot]
+            json_data = [data.model_dump() for data in data]
+            await self.mqttService.update_status(data)
+            await websocket.send_json(json_data, mode="text")
 
         doc_watch = self.collection_ref.on_snapshot(on_snapshot)
 

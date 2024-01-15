@@ -68,3 +68,10 @@ class ReservationFirestoreService(FirestoreService):
                 await websocket.receive_text()
         except Exception as e:
             doc_watch.unsubscribe()
+
+    def update(self, reservation_id: str, data: dict) -> str:
+        doc_id = self.get_doc_id_by_field(
+            field="reservation_id", expected_value=reservation_id
+        )
+        self.collection_ref.document(doc_id).update(data)
+        return doc_id
