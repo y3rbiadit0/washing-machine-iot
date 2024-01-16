@@ -68,7 +68,7 @@ async def block_machine(reservation_data: ReservationModel):
             data={"reservation_status": "finished"},
         )
         WashingMachinesFirestoreService().update(
-            reservation_data["machine_id"], data={"status": "free"}
+            reservation_data.machine_id, data={"status": "free"}
         )
 
     return BaseResponse(message="Machine blocked successfully!")
