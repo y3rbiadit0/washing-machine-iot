@@ -9,8 +9,8 @@ from mqtt_config import mqtt_broker_ip
 
 
 class MQTTTopic(str, Enum):
-    SERVO = "servo"
-    MACHINE_STATUS = "status"
+    SERVO = "washing_machines_iot/servo"
+    MACHINE_STATUS = "washing_machines_iot/status"
 
 
 class MqttService:
