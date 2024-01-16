@@ -56,20 +56,22 @@ async def unblock_machine(reservation_data: ReservationModel):
 
 @router.post("/block", status_code=http.HTTPStatus.CREATED)
 async def block_machine(reservation_data: ReservationModel):
+    reservation_service = ReservationFirestoreService()
     await MqttService().close_door(machine_id=reservation_data.machine_id)
     if reservation_data.reservation_status == "created":
-        ReservationFirestoreService().update(
+        reservation_service.update(
             reservation_id=reservation_data.reservation_id,
             data={"reservation_status": "clothes_loaded"},
         )
     if reservation_data.reservation_status == "clothes_loaded":
-        ReservationFirestoreService().update(
+        reservation_service.update(
             reservation_id=reservation_data.reservation_id,
             data={"reservation_status": "finished"},
         )
         WashingMachinesFirestoreService().update(
             reservation_data.machine_id, data={"status": "free"}
         )
+        reservation_service.delete(reservation_data.reservation_id)
 
     return BaseResponse(message="Machine blocked successfully!")
 

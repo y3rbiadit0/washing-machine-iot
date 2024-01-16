@@ -75,3 +75,10 @@ class ReservationFirestoreService(FirestoreService):
         )
         self.collection_ref.document(doc_id).update(data)
         return doc_id
+
+    def delete(self, reservation_id: str) -> str:
+        doc_id = self.get_doc_id_by_field(
+            field="reservation_id", expected_value=reservation_id
+        )
+        self.collection_ref.document(doc_id).delete()
+        return doc_id
