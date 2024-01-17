@@ -13,3 +13,6 @@ Also provide a way to make reservation for a given machine, authorize the person
 1. `poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000`
 
 
+2. If [behind a proxy server](https://fastapi.tiangolo.com/deployment/docker/) as in Portainer: `poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000 --proxy-headers`
+
+
