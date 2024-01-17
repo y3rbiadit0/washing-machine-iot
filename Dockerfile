@@ -7,4 +7,4 @@ COPY . /app
 RUN ["poetry", "install"]
 
 EXPOSE 8000
-ENTRYPOINT ["poetry", "run", "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["poetry", "run", "uvicorn", "main:app", "--proxy-headers", "--reload", "--host", "0.0.0.0", "--port", "8000"]
