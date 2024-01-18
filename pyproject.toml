@@ -17,6 +17,8 @@ black = "^23.11.0"
 qrcode = "^7.4.2"
 paho-mqtt = "^1.6.1"
 websockets = "^12.0"
+google-auth = {git = "https://github.com/y3rbiadit0/google-auth-library-python-use-external-time"}
+ntplib = "^0.4.0"
 
 
 [tool.black]

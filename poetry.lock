@@ -435,17 +435,16 @@ uritemplate = ">=3.0.1,<5"
 
 [[package]]
 name = "google-auth"
-version = "2.23.4"
+version = "2.26.2"
 description = "Google Authentication Library"
 optional = false
 python-versions = ">=3.7"
-files = [
-    {file = "google-auth-2.23.4.tar.gz", hash = "sha256:79905d6b1652187def79d491d6e23d0cbb3a21d3c7ba0dbaa9c8a01906b13ff3"},
-    {file = "google_auth-2.23.4-py2.py3-none-any.whl", hash = "sha256:d4bbc92fe4b8bfd2f3e8d88e5ba7085935da208ee38a134fc280e7ce682a05f2"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 cachetools = ">=2.0.0,<6.0"
+ntplib = ">=0.4.0,<2.0.0"
 pyasn1-modules = ">=0.2.1"
 rsa = ">=3.1.4,<5"
 
@@ -455,6 +454,12 @@ enterprise-cert = ["cryptography (==36.0.2)", "pyopenssl (==22.0.0)"]
 pyopenssl = ["cryptography (>=38.0.3)", "pyopenssl (>=20.0.0)"]
 reauth = ["pyu2f (>=0.1.5)"]
 requests = ["requests (>=2.20.0,<3.0.0.dev0)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/y3rbiadit0/google-auth-library-python-use-external-time"
+reference = "HEAD"
+resolved_reference = "49aa5af62b46894c635c4b53d766de1ed1969d9a"
 
 [[package]]
 name = "google-auth-httplib2"
@@ -491,20 +496,24 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [[package]]
 name = "google-cloud-firestore"
-version = "2.13.1"
+version = "2.14.0"
 description = "Google Cloud Firestore API client library"
 optional = false
 python-versions = ">=3.7"
-files = [
-    {file = "google-cloud-firestore-2.13.1.tar.gz", hash = "sha256:bd14d2eb9ae358d21058ce091c13dea11917e26f1c43738a51e9cea8b49b4f38"},
-    {file = "google_cloud_firestore-2.13.1-py2.py3-none-any.whl", hash = "sha256:8b9ace47f8aeb561a6fd74620a7335e30c48a25e18dfedbd0d7923695768d156"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 google-api-core = {version = ">=1.34.0,<2.0.dev0 || >=2.11.dev0,<3.0.0dev", extras = ["grpc"]}
 google-cloud-core = ">=1.4.1,<3.0.0dev"
 proto-plus = {version = ">=1.22.2,<2.0.0dev", markers = "python_version >= \"3.11\""}
 protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+
+[package.source]
+type = "git"
+url = "https://github.com/y3rbiadit0/python-firestore-async-on-snapshot-callback.git"
+reference = "main"
+resolved_reference = "f9cac775d3447f86ab5359a16165b95635f47a1b"
 
 [[package]]
 name = "google-cloud-storage"
@@ -846,6 +855,17 @@ python-versions = ">=3.5"
 files = [
     {file = "mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
     {file = "mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
+]
+
+[[package]]
+name = "ntplib"
+version = "0.4.0"
+description = "Python NTP library"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ntplib-0.4.0-py2.py3-none-any.whl", hash = "sha256:8d27375329ed7ff38755f7b6d4658b28edc147cadf40338a63a0da8133469d60"},
+    {file = "ntplib-0.4.0.tar.gz", hash = "sha256:899d8fb5f8c2555213aea95efca02934c7343df6ace9d7628a5176b176906267"},
 ]
 
 [[package]]
@@ -1438,4 +1458,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0775eee97284e11f899843dea2fdcc3078197783722844d47a17a6f3ed5da268"
+content-hash = "e6c4bc72974a84297c04315a1b57e8e8dc33af64f0c5069d70ebf58422df35ba"
