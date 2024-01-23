@@ -1,0 +1,42 @@
+[
+  {
+    "machine_id": "f74d1819-e021-4c2a-b051-7c9920166abe",
+    "location": "Residence",
+    "capacity_kg": 10,
+    "price": 0,
+    "status": "free",
+    "qr_code": "iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACGklEQVR4nO3aQW7EIAwFUEs5QI7E1XMkDhCJDra/gaRSO1v8WXSS4JeVBcaptO/HJUREREREREREQOLj+Dw5fUpKu/vsLVIqAgpREqQ3rR4ffkbUqW87bGKKI8qAelTpc9fnYgQo0gm/IsqGLI18iekLS+3vIMqLLKDgmcq/c49oP6Q/FYuIVxvHf/cnou2Qj4EefxBAlAQ9hq8zFoDlZAyi/ZHnyLqcjHgtQ6wWIcqBrOrU/oVWG3Za1VB9z9TYIEqBcOMBVonasSQ6GX3WKFEGhACT3uNsK/KalCgFajfaWlhdsNXcOLe298JCtCuyHLliTbmirWVZVWOWKAlqOJniFqHTLRYbogTISk/9OGqlZ8Rf59hv5Nn5INoWzXtLNLNkObJOnQyiBMiHfz1HGq1bzSuNiHZGNfpYlkE6UHJIlKiNKAnqOeJXttWITIWp7UEjhGh7JIIM8rOJjHgcaOXVxCDaGZ2jk+HZ4rftjhPss/NBtDGy82i0tRpuLb90TXl/UyPaGVl8NDW1HAWyZzoKURa0rCnYarDEePxvuUe0JxrDG1w1voMgeez/eAtRDuTLhiwryTi8xpW9mCgB0vTwZpbuPBGAIlSmvidRAlQjW/Dhw4+sI5fi5UTJkNakKEjkUaISpUM+57L5BxK0uojSIP2p2EziRX5UOX2rIUqDfIz6E7cleHudc4n2Rd8NIiIiIiIiIqKOfgDriTSGH/Vc1AAAAABJRU5ErkJggg==",
+    "brand": "Samsung",
+    "model": "WashMaster"
+  },
+  {
+    "machine_id": "ebfd082c-92fe-487f-aad7-37ffff49c7f8",
+    "location": "Residence",
+    "capacity_kg": 10,
+    "price": 0,
+    "status": "free",
+    "qr_code": "iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACCUlEQVR4nO3aQZKEIAwF0FT1ATgSV+dIHoAqRpKfgHZvZks+C7vVPFepAFEZ/x9NiIiIiIiIiIgcCcbnvlJwS+ro824XqZcHVKIkSE/G9bl5WVHzdD5o3tjiiDKgGVXnvXb/WQFIngucKB+yNLISszhRXmTVpY6Yaq4pifIh/dF4O8xUKrOwFKTRFkeUAGEs9Dp4AFES9BqoM6PvoWsQnY9w77ktaSUqyb0gsQNRErSuYDlakEu6JtVT5BdREoRVpzziI/S5XyFKgNCwKGtu6b4tKQthTUqUAvksY8mDucXzq2nz0x9OlAFJrCwsyhreWme6d0ALUSKEjpb4ZmSbdHzLirdlRJnQ8JQZcWjR28IcRJQJPZPHtiUm+97JIMqA/DCGr0S/pprvNCI6FulqQ+IFmNYQ1BTxhPrR1iI6Fq0MWiUGNUV8DtIHESVBWjX2JUckDx7pH1oQJUG47KtO3IxtSXu9GyFKgC7sTFcl2acakV/v1IiORkgZ/Lv8e4qIt1GJUiEPtZlHD3oX8b/TiOhEtAaa4Mp9lsGmJToZROcjlA2JNNoCPL/Es4ooA9IA26CMfS2ykkeixUGUAn0vOST2qHZS4+FEqZDE9xRte3se/S6ihEiv9O10W6ISpUH644XFB1pdq51BlAbF3IJpRRtc1tlUqbvV9z6X6Fz0v0FERERERERENNEfPk+KMZnXVL0AAAAASUVORK5CYII=",
+    "brand": "Samsung",
+    "model": "WashMaster"
+  },
+  {
+    "machine_id": "8aa61fac-3649-400b-95c5-6ca356190e7f",
+    "location": "Residence",
+    "capacity_kg": 10,
+    "price": 0,
+    "status": "free",
+    "qr_code": "iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACGUlEQVR4nO2aUW7DMAxDBeQAOZKvniP1AAW82CJlx90w9NeiP9ou1ssXIVP0rH6/LhMkSJAgQYIECSJkWMf95MSWlfpuu2+z8mJBEZQE6n/U13HjZ1Sd/W2Hb0x1gjJAraq0vev+wWcH9IVfh6CEkMsILeb9xAVlhLy7FD6DqgTlg/pXr/cPs6nq3/NJ0HYQ1oCWDxYISgItC32m1rmdjCVofwgaiXYSwyvIZkPCiwjKALnR4J5Pq8N8zMGGoBTQbS+MI2vUDy/iqjJ7ykjQztDV24lPqw1nxglpOQRPKigF1M8RymgqbQvhZ10bi6B9IR41sCGsh6rG2wRlgSAe43lTn8bUD6K62FFBG0PYq9FOIsfyOzLqa00+BO0KwXzE2RImFFU8algsKAnE23PKqBsSNpvrDxkJ2hNy/8lB1czYcdhYPmMtQRtDHEGQaI1bU7xoGFNBSaBC3wHJmNnUSQAtIYagnSEbamH/GNmW13/OuYI2hkplklGHbk5OLq6qj6NG0O6QK4j+c5pS5kxcUBJohFkRcKHZoO2wzwhKAY2FvRhZLyYZdKyCUkBUDbMtz7FGdPEYYwVlgLo8qlcdbkMwtMRd6ZR7CkoArZbDHlfoXUvxckGpIK8/ebagnn2mCsoH9aAzHMj1nFsFpYH614uHSR3DSCThv6WjgraFsBhYlPg3G+8pjDwFZYG+W4IECRIkSJAgQQ36AfvVfS+4FLqlAAAAAElFTkSuQmCC",
+    "brand": "Samsung",
+    "model": "WashMaster"
+  },
+  {
+    "machine_id": "67c74ca9-eaae-4729-a1cf-78d40c2daad6",
+    "location": "Residence",
+    "capacity_kg": 10,
+    "price": 0,
+    "status": "out_of_service",
+    "qr_code": "iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAACI0lEQVR4nO2ay43DMAxECaSAlKTWXZIKCMC1ySHpT4DdvYrDgyNbfDoN+FNE/2+bECJEiBAhQoQIBSSw1/7ljS0Z+jl2PyJjhsMg1ASyF52vHX+n19tOe/nGyY9QB+jwGsfeti/KwSDbwIpQN8hl5CHG8GkPQm0hd3AF7fieeT7yu/YIrQfZz4wgco4zf8lPhJaDYAXdHuFAqAl0s5BRHnTdJrQ+BI2k16l5jYLEkg6hLpBVnT61sGrDulX0rfYt9UWoC6TlhZV/O169AtlE7jIitCzke76SEJR1q5sg2KAwJdQDUky4I8FYWsneBMNPfQYWQqtCp4LT4gckY0nHBIXTCHWBYn4h+SoSs63sV/RZjhJaGqqO5PTYolWJHESoBYQ+xLpV103Ouv00pBo3QutDpRbMKiZSTV2GeGE6CDWBEElEUH9Kra6nEeoBnfbyjBKPemEqQqgR5NMrswgiUmdo/NGCUBdo+OMjoZvDoi0pkT37XEKrQjnUHA5kdRqq+pJqCC0OSV2PjRpieIhBqnnKiNCqkP3Mq25EsjSJI5VQD6jM9lGOZnQZijnHrWUltCyEsBFjLY8u/moKqjaWUBPI5JGzblyLXGacfsYg1AWaqZa4+Lj4i0QPQ6gb5K1KXJNGBRLzbyXUDsIwK+/DpmmoRp6EmkDuEMnEhhiaMsIV+rdBJ6FFIVjVnxldNEKMPvpcQutC/zNChAgRIkSIEKED+gEfegxy5FAAogAAAABJRU5ErkJggg==",
+    "brand": "Samsung",
+    "model": "WashMaster"
+  }
+]
