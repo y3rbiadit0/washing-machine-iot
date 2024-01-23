@@ -1,19 +1,25 @@
 import base64
 import uuid
 from io import BytesIO
+from queue import Queue
 from typing import List
 
 import qrcode
 from fastapi import WebSocket
 
 from api.v1.models.washing_machine_model import WashingMachineModel
-from .firestore_service import FirestoreService
+from .mongo_service import MongoDBService
 from ..mqtt_service import MqttService
 
 
-class WashingMachinesFirestoreService(FirestoreService):
+class WashingMachinesMongoDBService(MongoDBService):
     collection = "washing_machines"
     mqttService = MqttService()
+    # Queue for communication between the MongoDB watcher thread and FastAPI
+    change_queue = Queue()
+
+    def __init__(self):
+        super().__init__()
 
     def add(self, data: WashingMachineModel) -> str:
         data.machine_id = str(uuid.uuid4())
@@ -58,17 +64,18 @@ class WashingMachinesFirestoreService(FirestoreService):
         return base64.b64encode(img_bytes_io.read()).decode("utf-8")
 
     async def listen_washing_machines(self, websocket: WebSocket):
-        async def on_snapshot(doc_snapshot, changes, read_time):
-            data = [WashingMachineModel(**doc.to_dict()) for doc in doc_snapshot]
-            json_data = [data.model_dump() for data in data]
-            await self.mqttService.update_status(data)
-            await websocket.send_json(json_data, mode="text")
+        with self.collection_ref.watch() as stream:
+            while stream.alive:
+                change = stream.try_next()
+                # Note that the ChangeStream's resume token may be updated
+                # even when no changes are returned.
 
-        doc_watch = self.collection_ref.on_snapshot(on_snapshot)
-
-        try:
-            # IMPORTANT: Keep WebSocket connection alive
-            while True:
-                await websocket.receive_text()
-        except Exception as e:
-            doc_watch.unsubscribe()
+                if change is not None:
+                    await websocket.send_json(change)
+                    continue
+        # data = [WashingMachineModel(**doc) for doc in doc_snapshot]
+        # json_data = [data.model_dump() for data in data]
+        # await self.mqttService.update_status(data)
+        # await websocket.send_json(json_data, mode="text")
+        #
+        # await update_status(websocket)

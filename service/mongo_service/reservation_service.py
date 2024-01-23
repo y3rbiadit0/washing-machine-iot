@@ -6,14 +6,14 @@ from typing import Dict, List
 from fastapi import WebSocket
 
 from api.v1.models.reservation_model import ReservationModel
-from .firestore_service import FirestoreService
+from .mongo_service import MongoDBService
 from .washing_machines_service import (
-    WashingMachinesFirestoreService,
+    WashingMachinesMongoDBService,
 )
 from ..helpers import datetime_helper
 
 
-class ReservationFirestoreService(FirestoreService):
+class ReservationMongoDBService(MongoDBService):
     collection = "reservations"
 
     def add(self, data: Dict) -> str:
@@ -31,7 +31,7 @@ class ReservationFirestoreService(FirestoreService):
         return firestore_id
 
     def _reserve_washing_machine(self) -> str:
-        washing_machine_service = WashingMachinesFirestoreService()
+        washing_machine_service = WashingMachinesMongoDBService()
         available_washing_machines = washing_machine_service.get_multiple_by_field(
             "status", "free"
         )
@@ -73,12 +73,10 @@ class ReservationFirestoreService(FirestoreService):
         doc_id = self.get_doc_id_by_field(
             field="reservation_id", expected_value=reservation_id
         )
-        self.collection_ref.document(doc_id).update(data)
-        return doc_id
+        return super().update(doc_id, data)
 
     def delete(self, reservation_id: str) -> str:
         doc_id = self.get_doc_id_by_field(
             field="reservation_id", expected_value=reservation_id
         )
-        self.collection_ref.document(doc_id).delete()
-        return doc_id
+        return super().delete(doc_id)
