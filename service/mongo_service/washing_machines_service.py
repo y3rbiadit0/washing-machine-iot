@@ -70,7 +70,6 @@ class WashingMachinesMongoDBService(MongoDBService):
             json_data = [data.model_dump() for data in data]
             await MqttService().update_status(data)
             await websocket.send_json(json_data, mode="text")
-
         WashingMachinesListener(_on_snapshot).start()
 
 
@@ -80,6 +79,10 @@ class WashingMachinesListener(threading.Thread):
         self.on_snapshot = on_snapshot
 
     def run(self):
+        if inspect.iscoroutinefunction(self.on_snapshot):
+            asyncio.run(self.on_snapshot())
+        else:
+            self.on_snapshot()
         with WashingMachinesMongoDBService().collection_ref.watch(
             full_document="updateLookup"
         ) as stream:

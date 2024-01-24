@@ -68,10 +68,8 @@ class ReservationMongoDBService(MongoDBService):
 
     def listen_to_changes(self, websocket: WebSocket):
         async def _on_snapshot():
-            collection = list(ReservationMongoDBService().collection_ref.find({}))
-            data = [ReservationModel(**doc).model_dump() for doc in collection]
+            data = [reservation.model_dump() for reservation in self.get_all()]
             await websocket.send_json(data, mode="text")
-
         ReservationsListener(on_snapshot=_on_snapshot).start()
 
 
@@ -81,6 +79,11 @@ class ReservationsListener(threading.Thread):
         self.on_snapshot = on_snapshot
 
     def run(self):
+        if inspect.iscoroutinefunction(self.on_snapshot):
+            asyncio.run(self.on_snapshot())
+        else:
+            self.on_snapshot()
+
         with ReservationMongoDBService().collection_ref.watch(
             full_document="updateLookup"
         ) as stream:
