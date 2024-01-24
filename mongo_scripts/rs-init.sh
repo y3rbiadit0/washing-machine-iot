@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to Initialize MongoDB Replica Set with a single node
-mongo <<EOF
+mongosh <<EOF
 var config = {
     "_id": "dbrs",
     "version": 1,
