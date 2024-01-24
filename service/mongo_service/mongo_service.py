@@ -9,7 +9,7 @@ T = TypeVar("T")
 
 class MongoDBService:
     client: MongoClient = MongoClient(
-        "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&replicaSet=dbrs"
+        "mongodb://localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&replicaSet=dbrs"
     )
     db_name: str = "washing_machines_db"
     collection: str
