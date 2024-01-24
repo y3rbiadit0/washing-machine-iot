@@ -18,7 +18,7 @@ services:
     restart: always
     container_name: mongodb
     ports:
-      - 27017:27017
+      - 49153:27017
     networks:
       - mongo-network
     healthcheck:
