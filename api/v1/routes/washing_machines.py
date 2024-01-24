@@ -1,7 +1,5 @@
-import asyncio
 import base64
 import http
-import threading
 from io import BytesIO
 from typing import List
 
@@ -9,7 +7,9 @@ from fastapi import APIRouter, WebSocket
 from starlette.responses import StreamingResponse
 
 from service.mongo_service.reservation_service import ReservationMongoDBService
-from service.mongo_service.washing_machines_service import WashingMachinesMongoDBService
+from service.mongo_service.washing_machines_service import (
+    WashingMachinesMongoDBService,
+)
 from service.mqtt_service import MqttService
 from ..models.base_response import BaseResponse
 from ..models.reservation_model import ReservationModel
@@ -82,39 +82,23 @@ async def reserve_washing_machine() -> ReservationModel:
     return reservation
 
 
-class WashingMachinesListenerThread(threading.Thread):
-    def __init__(self, websocket: WebSocket):
-        super(WashingMachinesListenerThread, self).__init__()
-        self.websocket = websocket
-
-    def run(self):
-        with WashingMachinesMongoDBService().collection_ref.watch(
-            full_document="updateLookup"
-        ) as stream:
-            while stream.alive:
-                change = stream.try_next()
-                if change is not None:
-                    collection = list(
-                        WashingMachinesMongoDBService().collection_ref.find({})
-                    )
-                    data = [WashingMachineModel(**doc) for doc in collection]
-                    json_data = [data.model_dump() for data in data]
-                    asyncio.run(MqttService().update_status(data))
-                    asyncio.run(self.websocket.send_json(json_data, mode="text"))
-                    continue
-
-
 @router.websocket("/washing-machines-ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    WashingMachinesListenerThread(websocket).start()
+    washing_machines_service = WashingMachinesMongoDBService()
+    washing_machines_service.listen_to_changes(websocket)
     try:
         await websocket.receive_text()
     except Exception as e:
         pass
 
 
-# @router.websocket("/reservation-ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     await ReservationFirestoreService().listen_reservations(websocket)
+@router.websocket("/reservation-ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    reservation_service = ReservationMongoDBService()
+    reservation_service.listen_to_changes(websocket)
+    try:
+        await websocket.receive_text()
+    except Exception as e:
+        pass

@@ -1,7 +1,10 @@
+import asyncio
 import datetime
+import inspect
+import threading
 import uuid
 from random import randint
-from typing import Dict, List
+from typing import Dict, List, Callable
 
 from fastapi import WebSocket
 
@@ -51,24 +54,6 @@ class ReservationMongoDBService(MongoDBService):
     def get_all(self) -> List[ReservationModel]:
         return [ReservationModel(**doc) for doc in super().get_all()]
 
-    async def listen_reservations(self, websocket: WebSocket):
-        doc_ref = self.collection_ref
-
-        async def on_snapshot(doc_snapshot, changes, read_time):
-            data = [
-                ReservationModel(**doc.to_dict()).model_dump() for doc in doc_snapshot
-            ]
-            await websocket.send_json(data, mode="text")
-
-        doc_watch = doc_ref.on_snapshot(on_snapshot)
-
-        try:
-            # IMPORTANT: Keep WebSocket connection alive
-            while True:
-                await websocket.receive_text()
-        except Exception as e:
-            doc_watch.unsubscribe()
-
     def update(self, reservation_id: str, data: dict) -> str:
         doc_id = self.get_doc_id_by_field(
             field="reservation_id", expected_value=reservation_id
@@ -80,3 +65,30 @@ class ReservationMongoDBService(MongoDBService):
             field="reservation_id", expected_value=reservation_id
         )
         return super().delete(doc_id)
+
+    def listen_to_changes(self, websocket: WebSocket):
+        async def _on_snapshot():
+            collection = list(ReservationMongoDBService().collection_ref.find({}))
+            data = [ReservationModel(**doc).model_dump() for doc in collection]
+            await websocket.send_json(data, mode="text")
+
+        ReservationsListener(on_snapshot=_on_snapshot).start()
+
+
+class ReservationsListener(threading.Thread):
+    def __init__(self, on_snapshot: Callable):
+        super(ReservationsListener, self).__init__()
+        self.on_snapshot = on_snapshot
+
+    def run(self):
+        with ReservationMongoDBService().collection_ref.watch(
+            full_document="updateLookup"
+        ) as stream:
+            while stream.alive:
+                change = stream.try_next()
+                if change is not None:
+                    if inspect.iscoroutinefunction(self.on_snapshot):
+                        asyncio.run(self.on_snapshot())
+                    else:
+                        self.on_snapshot()
+                    continue

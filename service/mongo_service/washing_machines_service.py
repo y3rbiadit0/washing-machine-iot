@@ -1,8 +1,10 @@
+import asyncio
 import base64
+import inspect
+import threading
 import uuid
 from io import BytesIO
-from queue import Queue
-from typing import List
+from typing import List, Callable
 
 import qrcode
 from fastapi import WebSocket
@@ -15,8 +17,6 @@ from ..mqtt_service import MqttService
 class WashingMachinesMongoDBService(MongoDBService):
     collection = "washing_machines"
     mqttService = MqttService()
-    # Queue for communication between the MongoDB watcher thread and FastAPI
-    change_queue = Queue()
 
     def __init__(self):
         super().__init__()
@@ -63,19 +63,31 @@ class WashingMachinesMongoDBService(MongoDBService):
 
         return base64.b64encode(img_bytes_io.read()).decode("utf-8")
 
-    async def listen_washing_machines(self, websocket: WebSocket):
-        with self.collection_ref.watch() as stream:
+    def listen_to_changes(self, websocket: WebSocket):
+        async def _on_snapshot():
+            collection = list(WashingMachinesMongoDBService().collection_ref.find({}))
+            data = [WashingMachineModel(**doc) for doc in collection]
+            json_data = [data.model_dump() for data in data]
+            await MqttService().update_status(data)
+            await websocket.send_json(json_data, mode="text")
+
+        WashingMachinesListener(_on_snapshot).start()
+
+
+class WashingMachinesListener(threading.Thread):
+    def __init__(self, on_snapshot: Callable):
+        super(WashingMachinesListener, self).__init__()
+        self.on_snapshot = on_snapshot
+
+    def run(self):
+        with WashingMachinesMongoDBService().collection_ref.watch(
+            full_document="updateLookup"
+        ) as stream:
             while stream.alive:
                 change = stream.try_next()
-                # Note that the ChangeStream's resume token may be updated
-                # even when no changes are returned.
-
                 if change is not None:
-                    await websocket.send_json(change)
+                    if inspect.iscoroutinefunction(self.on_snapshot):
+                        asyncio.run(self.on_snapshot())
+                    else:
+                        self.on_snapshot()
                     continue
-        # data = [WashingMachineModel(**doc) for doc in doc_snapshot]
-        # json_data = [data.model_dump() for data in data]
-        # await self.mqttService.update_status(data)
-        # await websocket.send_json(json_data, mode="text")
-        #
-        # await update_status(websocket)
