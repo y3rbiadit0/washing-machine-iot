@@ -1,9 +1,4 @@
-from fastapi import FastAPI
+import uvicorn
 
-import api
-import core
-from service.mongo_service.mongo_service import MongoDBService
-
-mongodb_service = MongoDBService.init_db()
-app = FastAPI(title=core.settings().app_name, version=core.settings().version)
-app.include_router(api.v1_router, prefix="/v1")
+if __name__ == "__main__":
+    uvicorn.run("app:create_app", host="0.0.0.0", port=8001, reload=True)
