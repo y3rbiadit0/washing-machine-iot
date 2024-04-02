@@ -4,29 +4,35 @@ from typing import Dict, TypeVar, List
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
+from definitions import ROOT_DIR
+
 T = TypeVar("T")
 
 
 class MongoDBService:
-    client: MongoClient = MongoClient(
-        "mongodb://localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&replicaSet=dbrs"
-    )
-    db_name: str = "washing_machines_db"
-    collection: str
     collection_ref: Collection
+    collection: str
+    db_name: str = "washing_machines_db"
+    mongo_db_url: str = "mongodb://localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&replicaSet=dbrs"
 
-    def __init__(self):
+    def __init__(
+        self,
+        client: MongoClient = MongoClient(mongo_db_url),
+    ):
+        self.client = client
         self.db = self.client[self.db_name]
         self.collection_ref = self.db[self.collection]
 
     @staticmethod
-    def init_db():
-        db_client = MongoDBService.client
-        db_client.drop_database(MongoDBService.db_name)
-        db = db_client[MongoDBService.db_name]
+    def init_db(
+        client: MongoClient = MongoClient(mongo_db_url),
+    ):
+        """Init the database with the initial data."""
+        client.drop_database(MongoDBService.db_name)
+        db = client[MongoDBService.db_name]
         db.create_collection("reservations")
         db.create_collection("washing_machines")
-        with open("db/init_data.json") as f:
+        with open(f"{ROOT_DIR}/db/init_data.json") as f:
             washing_machines_init_data = json.load(f)
             db["washing_machines"].insert_many(washing_machines_init_data)
 
