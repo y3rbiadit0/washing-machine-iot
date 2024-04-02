@@ -10,7 +10,7 @@ import qrcode
 from fastapi import WebSocket
 
 from api.v1.models.washing_machine_model import WashingMachineModel
-from .mongo_service import MongoDBService
+from .base_service import MongoDBService
 from ..mqtt_service import MqttService
 
 

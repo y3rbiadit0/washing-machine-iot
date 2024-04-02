@@ -9,7 +9,7 @@ from typing import Dict, List, Callable
 from fastapi import WebSocket
 
 from api.v1.models.reservation_model import ReservationModel
-from .mongo_service import MongoDBService
+from .base_service import MongoDBService
 from .washing_machines_service import (
     WashingMachinesMongoDBService,
 )
