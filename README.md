@@ -6,8 +6,8 @@ Also provide a way to make reservation for a given machine, authorize the person
 
 # Branches
 
-1. main -> Using firebase.
-2. mongodb -> Using a mongodb database with fake init data.
+1. `main` -> Using firebase.
+2. `mongodb` -> Using a mongodb database with fake init data.
 
 # Docker Image - Instructions 
 1. Build Image: `docker build -t washing_machines_iot_server_64 . --platform linux/amd64`
