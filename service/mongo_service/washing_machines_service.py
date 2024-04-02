@@ -70,6 +70,7 @@ class WashingMachinesMongoDBService(MongoDBService):
             json_data = [data.model_dump() for data in data]
             await MqttService().update_status(data)
             await websocket.send_json(json_data, mode="text")
+
         WashingMachinesListener(_on_snapshot).start()
 
 

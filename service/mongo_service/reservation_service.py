@@ -70,6 +70,7 @@ class ReservationMongoDBService(MongoDBService):
         async def _on_snapshot():
             data = [reservation.model_dump() for reservation in self.get_all()]
             await websocket.send_json(data, mode="text")
+
         ReservationsListener(on_snapshot=_on_snapshot).start()
 
 
