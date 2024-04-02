@@ -4,6 +4,10 @@ Project to allow students at UNISA Residences to not have to be physically in th
 
 Also provide a way to make reservation for a given machine, authorize the person that reserved a given machine through QR Codes and a platform management so building manager can support how is currently working.
 
+# Branches
+
+1. main -> Using firebase.
+2. mongodb -> Using a mongodb database with fake init data.
 
 # Docker Image - Instructions 
 1. Build Image: `docker build -t washing_machines_iot_server_64 . --platform linux/amd64`
