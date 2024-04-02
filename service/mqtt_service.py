@@ -1,11 +1,12 @@
 import json
 from enum import Enum
+from functools import cached_property
 from typing import Dict, List
 
 from paho.mqtt import publish
 
 from api.v1.models.washing_machine_model import WashingMachineModel
-from mqtt_config import mqtt_broker_ip
+from config import get_config
 
 
 class MQTTTopic(str, Enum):
@@ -14,6 +15,10 @@ class MQTTTopic(str, Enum):
 
 
 class MqttService:
+    @cached_property
+    def mqtt_ip(self) -> str:
+        return get_config().MQTT_SERVER_IP
+
     async def update_status(self, data: List[WashingMachineModel]) -> Dict:
         free_machines = len(
             [
@@ -45,7 +50,7 @@ class MqttService:
         publish.single(
             topic=MQTTTopic.MACHINE_STATUS.value,
             payload=json.dumps(json_data),
-            hostname=mqtt_broker_ip,
+            hostname=self.mqtt_ip,
             qos=2,
         )
         return json_data
@@ -55,7 +60,7 @@ class MqttService:
         publish.single(
             topic=MQTTTopic.SERVO.value,
             payload=json.dumps(payload),
-            hostname=mqtt_broker_ip,
+            hostname=self.mqtt_ip,
             qos=2,
         )
 
@@ -64,6 +69,6 @@ class MqttService:
         publish.single(
             topic=MQTTTopic.SERVO.value,
             payload=json.dumps(payload),
-            hostname=mqtt_broker_ip,
+            hostname=self.mqtt_ip,
             qos=2,
         )
