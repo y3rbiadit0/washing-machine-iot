@@ -2,11 +2,13 @@ import mongomock
 from fastapi import FastAPI
 
 import api
+import config
 import core
 from service.mongo_service.mongo_service import MongoDBService
 
 
 def create_app():
+    configs = config.get_config()
     mongodb_service = MongoDBService.init_db()
     app = FastAPI(title=core.settings().app_name, version=core.settings().version)
     app.include_router(api.v1_router, prefix="/v1")
@@ -14,6 +16,7 @@ def create_app():
 
 
 def create_mock_app():
+    configs = config.get_config()
     mongodb_service = MongoDBService.init_db(client=mongomock.MongoClient())
     app = FastAPI(title=core.settings().app_name, version=core.settings().version)
     app.include_router(api.v1_router, prefix="/v1")
